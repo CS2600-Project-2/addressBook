@@ -196,5 +196,32 @@ Status edit_contact(AddressBook *address_book)
 
 Status delete_contact(AddressBook *address_book)
 {
-	/* Add the functionality for delete contacts here */
+	/* Add the functionality for delete contacts here */	
+	int option;
+
+	menu_header("Search Contact to delete by:\n");
+
+	printf("0. Back\n");
+	printf("1. Name\n");
+	printf("2. Phone No\n");
+	printf("3. Email No\n");
+	printf("4. Serial No\n");
+
+	printf("\n");
+	printf("Please select an option: ");
+	option = get_option(NUM, "");
+
+	switch (option)
+		{
+			case e_first_opt:
+				break;
+			case e_second_opt:
+				break;
+			case e_third_opt:
+				break;
+			case e_fourth_opt:
+				break;
+			case e_fifth_opt:
+				break;
+		}
 }
