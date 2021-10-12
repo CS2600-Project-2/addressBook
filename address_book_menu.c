@@ -106,7 +106,7 @@ Status menu(AddressBook *address_book)
 		switch (option)
 		{
 			case e_add_contact:
-				/* Add your implementation to call add_contacts function here */
+				add_contacts(address_book);
 				break;
 			case e_search_contact:
 				search_contact(address_book);
@@ -133,7 +133,50 @@ Status menu(AddressBook *address_book)
 
 Status add_contacts(AddressBook *address_book)
 {
-	/* Add the functionality for adding contacts here */
+	AddressBook newPerson;
+	int option;
+
+	printf("0. Back\n");
+	printf("1. Name       :\n");
+	printf("2. Phone No %i:\n", len(newPerson.list->phone_numbers));
+	printf("3. Email ID %i:\n", len(newPerson.list->email_addresses));
+	printf("\n");
+	printf("Please select an option: ");
+	scanf("%i", &option);
+
+	do {
+		int len_phone = len(newPerson.list->phone_numbers);
+		int len_email = len(newPerson.list->email_addresses);
+
+		if (option == 1) {
+			printf("Enter the name: ");
+			scanf("%s", &newPerson.list->name);
+		}
+		else if (option == 2) {
+			
+			printf("Enter Phone Number %i, [Please enter the same option of alternate Phone Number]:\n", len_phone);
+			scanf("%s", &newPerson.list->phone_numbers[len_phone]);
+			len_phone++;
+		}
+		else if (option == 3) {
+			printf("Enter Email ID %i, [Please enter the same option of alternate Email ID]:\n", len_email);
+			scanf("%s", &newPerson.list->email_addresses[len_email]);
+			len_email++;
+		}
+
+		printf("0. Back\n");
+		printf("1. Name       : %s\n", newPerson.list->name);
+		printf("2. Phone No %i: %s\n", len_phone, newPerson.list->phone_numbers[len_phone]);
+		printf("3. Email ID %i: %s\n", len_email, newPerson.list->email_addresses[len_email]);
+		printf("\n");
+		printf("Please select an option: ");
+		scanf("%i", &option);
+
+	} while (option != 0);
+
+	newPerson.count = address_book->count + 1;
+	newPerson.list->si_no = newPerson.count;
+	
 }
 
 Status search(const char *str, AddressBook *address_book, int loop_count, int field, const char *msg, Modes mode)
