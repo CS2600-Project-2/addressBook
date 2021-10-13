@@ -280,7 +280,7 @@ Status delete_contact(AddressBook *address_book)
 	{
 		printf("   Phone No %d : %s\n", emailEntry, address_book->list[serialNum-1].phone_numbers[emailEntry-1]);
 	}
-
+	
 	printf("Enter 'Y' to delete. [Press any key to ignore]: ");
 	option = get_option(CHAR,"");
 	if(option != 'Y'||option != 'y')
