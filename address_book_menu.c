@@ -228,29 +228,42 @@ Status delete_contact(AddressBook *address_book)
 			case e_second_opt:
 				field = 0;
 				printf("Enter the Name: ");
+				scanf("%s", &searchFor);
+				search(searchFor, address_book, address_book->count, field,
+				"Press: [s] = Select, [q] | Cancel: ", e_delete);
+				option = get_option(CHAR, "");
+				if(option == 'q')
+				{
+					return e_back;
+				}
 				break;
 			case e_third_opt:
 				field = 1;
 				printf("Enter the Phone No: ");
+				scanf("%s", &searchFor);
+				search(searchFor, address_book, address_book->count, field,
+						"Press: [s] = Select, [q] | Cancel: ", e_delete);
+				option = get_option(CHAR, "");
+				if(option == 'q')
+				{
+					return e_back;
+				}
 				break;
 			case e_fourth_opt:
 				field = 2; 
+				scanf("%s", &searchFor);
+				search(searchFor, address_book, address_book->count, field,
+						"Press: [s] = Select, [q] | Cancel: ", e_delete);
+				option = get_option(CHAR, "");
+				if(option == 'q')
+				{
+					return e_back;
+				}
 				printf("Enter the Email ID: ");
 				break;
 			case e_fifth_opt:
-				field = 3; 
-				printf("Enter the Serial No: ");
 				break;
 		}
-
-	scanf("%s", &searchFor);
-	search(searchFor, address_book, address_book->count, field,
-			"Press: [s] = Select, [q] | Cancel: ", e_delete);
-	option = get_option(CHAR, "");
-	if(option == 'q')
-	{
-		return e_back;
-	}
 
 	printf("Select a Serial Number (S.No) to Delete: ");
 	serialNum = get_option(NUM, "");
