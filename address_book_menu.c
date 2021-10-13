@@ -9,6 +9,7 @@
 #include "address_book_menu.h"
 #include "address_book.h"
 
+//USER INPUT PROCESSING
 int get_option(int type, const char *msg)
 {
 	/*
@@ -84,6 +85,7 @@ void main_menu(void)
 	printf("Please select an option: ");
 }
 
+//WE NEED TO CREATE MAIN where we load file
 Status menu(AddressBook *address_book)
 {
 	ContactInfo backup;
@@ -96,6 +98,7 @@ Status menu(AddressBook *address_book)
 
 		option = get_option(NUM, "");
 
+		//if we have no entries, you can't do anything but add entries
 		if ((address_book-> count == 0) && (option != e_add_contact))
 		{
 			get_option(NONE, "No entries found!!. Would you like to add? Use Add Contacts");
@@ -118,8 +121,8 @@ Status menu(AddressBook *address_book)
 				delete_contact(address_book);
 				break;
 			case e_list_contacts:
+				list_contacts;
 				break;
-				/* Add your implementation to call list_contacts function here */
 			case e_save:
 				save_file(address_book);
 				break;
