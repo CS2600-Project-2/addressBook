@@ -198,13 +198,19 @@ Status delete_contact(AddressBook *address_book)
 {
 	/* Add the functionality for delete contacts here */	
 	int option;
+	int serialNum;
+	int field;
+	char searchFor[32];
+
+	int phoneEntry = 1;
+	int emailEntry = 1;
 
 	menu_header("Search Contact to delete by:\n");
 
 	printf("0. Back\n");
 	printf("1. Name\n");
 	printf("2. Phone No\n");
-	printf("3. Email No\n");
+	printf("3. Email No\n"); 
 	printf("4. Serial No\n");
 
 	printf("\n");
@@ -214,14 +220,61 @@ Status delete_contact(AddressBook *address_book)
 	switch (option)
 		{
 			case e_first_opt:
+				return e_back;
 				break;
 			case e_second_opt:
+				field = 0;
+				printf("Enter the Name: ");
 				break;
 			case e_third_opt:
+				field = 1;
+				printf("Enter the Phone No: ");
 				break;
 			case e_fourth_opt:
+				field = 2; 
+				printf("Enter the Email ID: ");
 				break;
 			case e_fifth_opt:
+				field = 3; 
+				printf("Enter the Serial No: ");
 				break;
 		}
+
+	scanf("%s", &searchFor);
+	search(searchFor, address_book, address_book->count, field,
+			"Press: [s] = Select, [q] | Cancel: ", e_delete);
+	option = get_option(CHAR, "");
+	if(option == 'q')
+	{
+		return e_back;
+	}
+
+	printf("Select a Serial Number (S.No) to Delete: ");
+	serialNum = get_option(NUM, "");
+	
+	menu_header("Delete Contact:\n");
+	printf("0. Back\n");
+	printf("1. Name       : %s\n", address_book->list[serialNum-1].name);
+
+	printf("2. Phone No 1 : %s\n", address_book->list[serialNum-1].phone_numbers[0]);
+	for(; phoneEntry < PHONE_NUMBER_COUNT; phoneEntry++);
+	{
+		printf("   Phone No %d : %s\n", phoneEntry, address_book->list[serialNum-1].phone_numbers[phoneEntry-1]);
+	}
+
+	printf("3. Email No 1 : %s\n", address_book->list[serialNum-1].phone_numbers[0]); 
+	for(; emailEntry < PHONE_NUMBER_COUNT; emailEntry++);
+	{
+		printf("   Phone No %d : %s\n", emailEntry, address_book->list[serialNum-1].phone_numbers[emailEntry-1]);
+	}
+
+	printf("Enter 'Y' to delete. [Press any key to ignore]: ");
+	option = get_option(CHAR,"");
+	if(option != 'Y'||option != 'y')
+	{
+		return e_back;
+	}
+
+	
+
 }
