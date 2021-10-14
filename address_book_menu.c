@@ -138,15 +138,17 @@ Status menu(AddressBook *address_book)
 				delete_contact(address_book);
 				break;
 			case e_list_contacts:
-				list_contacts;
+				//list_contacts;
 				break;
 			case e_save:
 				save_file(address_book);
 				break;
 			case e_exit:
+				printf("GoodBye\n");
 				break;
 		}
 	} while (option != e_exit);
+
 
 	return e_success;
 }
@@ -209,15 +211,47 @@ Status add_contacts(AddressBook *address_book)
 	// address_book->list
 	
 }
-
+//(string to search, addressbook, ?, what field, ??, modes?)
 Status search(const char *str, AddressBook *address_book, int loop_count, int field, const char *msg, Modes mode)
 {
 	/* Add the functionality for adding contacts here */
 }
 
-Status search_contact(AddressBook *address_book)
-{
-	/* Add the functionality for search contacts here */
+//Under maintanence: Ben
+Status search_contact(AddressBook *address_book){
+	int option;
+	char input[32];
+	menu_header("Search Contact By:\n");
+	printf("0. Back\n");
+	printf("1. Name\n");
+	printf("2. Phone No\n");
+	printf("3. Email ID\n\n");
+	printf("Please select an option: ");
+	option = get_option(NUM, "");
+
+	while (option != e_first_opt) {
+		switch (option){
+			case e_first_opt:
+				return e_back;
+				break;
+			case e_second_opt:
+				printf("Enter a name to search: ");
+				scanf("%s",input);
+				//search()
+				break;
+				//
+			case e_third_opt:
+				printf("Enter Phone Number to search:");
+				scanf("%s",input);
+				break;
+			case e_fourth_opt:
+				printf("Enter an email address to search: ");
+				scanf("%s",input);
+				break;
+			default:
+				printf("Please enter a valid number.");
+		}
+	}
 }
 
 Status edit_contact(AddressBook *address_book)
