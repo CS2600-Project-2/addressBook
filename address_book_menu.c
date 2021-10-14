@@ -212,13 +212,21 @@ Status add_contacts(AddressBook *address_book)
 	address_book->count++;
 	
 }
+// under maintenance by: Nick
 //(string to search, addressbook, ?, what field, ??, modes?)
 Status search(const char *str, AddressBook *address_book, int loop_count, int field, const char *msg, Modes mode)
 {
-	/* Add the functionality for adding contacts here */
+	int i;
+	//
+	menu_header("Search Result:\n");
+	printf("\n");
+	printf("%.*s\n", 50, "########################");
+	// printf(": S.No  :  Name")
+
+
 }
 
-//Under maintanence: Ben
+//Under maintanence: Ben, Nick
 Status search_contact(AddressBook *address_book){
 	int option;
 	char input[32];
@@ -238,16 +246,30 @@ Status search_contact(AddressBook *address_book){
 			case e_second_opt:
 				printf("Enter a name to search: ");
 				scanf("%s",input);
-				//search()
+				search(input, address_book, address_book->count, 0, "Press [q] | Cancel: ", e_search);
+				option = get_option(CHAR, "");
+				if (option == "q")
+				{
+					return e_back;
+				}
 				break;
-				//
 			case e_third_opt:
 				printf("Enter Phone Number to search:");
 				scanf("%s",input);
+				search(input, address_book, address_book->count, 1, "Press [q] | Cancel: ", e_search);
+				if (option == "q")
+				{
+					return e_back;
+				}
 				break;
 			case e_fourth_opt:
 				printf("Enter an email address to search: ");
 				scanf("%s",input);
+				search(input, address_book, address_book->count, 2, "Press [q] | Cancel: ", e_search);
+				if (option == "q")
+				{
+					return e_back;
+				}
 				break;
 			default:
 				printf("Please enter a valid number.");
