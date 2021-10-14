@@ -20,6 +20,7 @@ int get_option(int type, const char *msg)
 	 */ 
 
 	/* Fill the code to add above functionality */
+	
 }
 
 Status save_prompt(AddressBook *address_book)
