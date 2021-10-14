@@ -270,6 +270,7 @@ Status delete_contact(AddressBook *address_book)
 	int phoneEntry = 1;
 	int emailEntry = 1;
 	ContactInfo *entry;
+	ContactInfo *curEntry, *nextEntry;
 	entry = address_book->list;
 
 	menu_header("Search Contact to delete by:\n");
@@ -356,7 +357,7 @@ Status delete_contact(AddressBook *address_book)
 	//Printing out email addresses
 	printf("3. Email ID 1 : "); 
 	if(&entry->email_addresses[0][0]!=NULL)
-	{
+	{  
 		printf("%s", &entry->email_addresses[0][0]);
 		emailEntry++;
 	}
@@ -369,14 +370,28 @@ Status delete_contact(AddressBook *address_book)
 		}
 	}
 	
-
-
 	printf("Enter 'Y' to delete. [Press any key to ignore]: ");
 	option = get_option(CHAR,"");
 	if(option != 'Y'||option != 'y')
 	{
 		return e_back;
 	}
+
+    curEntry = entry;
+	nextEntry = entry+1;
+	for(; serialNum <= address_book->count; serialNum++)
+	{
+		nextEntry->si_no = curEntry->si_no;
+		memcpy(curEntry, nextEntry, sizeof(ContactInfo));
+		curEntry++;
+		if (nextEntry->si_no < address_book->count)
+			nextEntry = curEntry + 1;
+		//entry->si_no = serialNum;
+		//entry++;
+	}
+	address_book->count--;
+	return e_success;
+
 
 	
 
