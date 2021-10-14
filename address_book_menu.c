@@ -49,7 +49,7 @@ Status save_prompt(AddressBook *address_book)
 
 Status list_contacts(AddressBook *address_book, const char *title, int *index, const char *msg, Modes mode)
 {
-	FILE* stream = fopen(address_book, "r'");
+	address_book->fp = fopen(DEFAULT_FILE, "r'");
 	ContactInfo currentEntry = *(address_book->list);
 
 	for(int i = 0; i < address_book->count; i++){
@@ -82,7 +82,7 @@ void menu_header(const char *str)
 	system("clear");
 
 	printf("#######  Address Book  #######\n");
-	if (str != '\0')
+	if (*str != '\0')
 	{
 		printf("#######  %s\n", str);
 	}

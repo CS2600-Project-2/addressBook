@@ -117,6 +117,27 @@ Status save_file(AddressBook *address_book)
 	 * Add the logic to save the file
 	 * Make sure to do error handling
 	 */ 
+	ContactInfo *contactNum;
+	contactNum = address_book->list;
+	int loop = 0;
+	char nameChar[32], phoneChar[500], emailCHar[500];
+
+	while(1 && loop < address_book->count) {
+		fputc(contactNum->si_no, address_book->fp);
+		strcpy(nameChar, contactNum->name[0] + ',');
+		fputs(nameChar, address_book->fp);
+		for (int i = 0; i < 5; i++) {
+			strcat(phoneChar, contactNum->phone_numbers[i] + ',');
+		}
+		strcat(phoneChar, ",,,,");
+		fputs(phoneChar, address_book->fp);
+
+
+		for (int i = 0; i < 5; i++) {
+			strcat(emailCHar, contactNum->email_addresses[i] + ',');
+		}
+		fputs(emailCHar, address_book->fp);
+	}
 
 	fclose(address_book->fp);
 	free(address_book->list);
