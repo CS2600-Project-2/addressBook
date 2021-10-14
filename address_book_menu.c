@@ -160,7 +160,7 @@ Status add_contacts(AddressBook *address_book)
 	int option;
 	int phoneEntry = 1;
 	int emailEntry = 1;
-	ContactInfo newContact;
+	ContactInfo *newContact;
 	newContact = address_book->list;
 	for (int i = 0; i < address_book->count; i++)
 	{
@@ -184,15 +184,15 @@ Status add_contacts(AddressBook *address_book)
 					break;
 				case e_second_opt:
 					printf("Enter the name: ");
-					scanf("%s", &newContact.name[0]);
+					scanf("%s", &newContact->name[0]);
 				case e_third_opt:
 					printf("Enter Phone Number %i, [Please enter the same option of alternate Phone Number]:\n", phoneEntry);
-					scanf("%s", &newContact.phone_numbers[phoneEntry]);
+					scanf("%s", &newContact->phone_numbers[phoneEntry]);
 					phoneEntry++;
 					break;
 				case e_fourth_opt:
 					printf("Enter Email ID %i, [Please enter the same option of alternate Email ID]:\n", emailEntry);
-					scanf("%s", &newContact.email_addresses[emailEntry]);
+					scanf("%s", &newContact->email_addresses[emailEntry]);
 					emailEntry++;
 					break;
 				case e_fifth_opt:
@@ -201,9 +201,9 @@ Status add_contacts(AddressBook *address_book)
 
 		menu_header("Add Contact:\n");
 		printf("0. Back\n");
-		printf("1. Name       : %s\n", newContact.name[0]);
-		printf("2. Phone No %i: %s\n", phoneEntry, newContact.phone_numbers[phoneEntry]);
-		printf("3. Email ID %i: %s\n", emailEntry, newContact.email_addresses[emailEntry]);
+		printf("1. Name       : %s\n", newContact->name[0]);
+		printf("2. Phone No %i: %s\n", phoneEntry, newContact->phone_numbers[phoneEntry]);
+		printf("3. Email ID %i: %s\n", emailEntry, newContact->email_addresses[emailEntry]);
 		printf("\n");
 		printf("Please select an option: ");
 		option = get_option(NUM, "");
