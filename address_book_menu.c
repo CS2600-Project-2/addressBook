@@ -136,49 +136,60 @@ Status menu(AddressBook *address_book)
 
 Status add_contacts(AddressBook *address_book)
 {
-	AddressBook newPerson;
+	/* Add the functionality for adding contacts here */
 	int option;
+	int phoneEntry = 1;
+	int emailEntry = 1;
+	char nameChar[32];
+	char phoneChar[32];
+	char emailChar[32];
+	ContactInfo newContact;
+	newContact.si_no = address_book->list->si_no + 1;
 
+	menu_header("Add Contact:\n");
 	printf("0. Back\n");
 	printf("1. Name       :\n");
-	printf("2. Phone No %i:\n", len(newPerson.list->phone_numbers));
-	printf("3. Email ID %i:\n", len(newPerson.list->email_addresses));
+	printf("2. Phone No %i:\n", phoneEntry);
+	printf("3. Email ID %i:\n", emailEntry);
 	printf("\n");
 	printf("Please select an option: ");
-	scanf("%i", &option);
+	option = get_option(NUM, "");
 
-	do {
-		int len_phone = len(newPerson.list->phone_numbers);
-		int len_email = len(newPerson.list->email_addresses);
+	while (option != e_first_opt && PHONE_NUMBER_COUNT < 5 && EMAIL_ID_COUNT < 5) {
+		switch (option)
+			{
+				case e_first_opt:
+					return e_back;
+					break;
+				case e_second_opt:
+					printf("Enter the name: ");
+					scanf("%s", &newContact.name[0]);
+				case e_third_opt:
+					printf("Enter Phone Number %i, [Please enter the same option of alternate Phone Number]:\n", phoneEntry);
+					scanf("%s", &newContact.phone_numbers[phoneEntry]);
+					phoneEntry++;
+					break;
+				case e_fourth_opt:
+					printf("Enter Email ID %i, [Please enter the same option of alternate Email ID]:\n", emailEntry);
+					scanf("%s", &newContact.email_addresses[emailEntry]);
+					emailEntry++;
+					break;
+				case e_fifth_opt:
+					break;
+			}
 
-		if (option == 1) {
-			printf("Enter the name: ");
-			scanf("%s", &newPerson.list->name);
-		}
-		else if (option == 2) {
-			
-			printf("Enter Phone Number %i, [Please enter the same option of alternate Phone Number]:\n", len_phone);
-			scanf("%s", &newPerson.list->phone_numbers[len_phone]);
-			len_phone++;
-		}
-		else if (option == 3) {
-			printf("Enter Email ID %i, [Please enter the same option of alternate Email ID]:\n", len_email);
-			scanf("%s", &newPerson.list->email_addresses[len_email]);
-			len_email++;
-		}
-
+		menu_header("Add Contact:\n");
 		printf("0. Back\n");
-		printf("1. Name       : %s\n", newPerson.list->name);
-		printf("2. Phone No %i: %s\n", len_phone, newPerson.list->phone_numbers[len_phone]);
-		printf("3. Email ID %i: %s\n", len_email, newPerson.list->email_addresses[len_email]);
+		printf("1. Name       : %s\n", newContact.name[0]);
+		printf("2. Phone No %i: %s\n", phoneEntry, newContact.phone_numbers[phoneEntry]);
+		printf("3. Email ID %i: %s\n", emailEntry, newContact.email_addresses[emailEntry]);
 		printf("\n");
 		printf("Please select an option: ");
-		scanf("%i", &option);
+		option = get_option(NUM, "");
+	}
 
-	} while (option != 0);
-
-	newPerson.count = address_book->count + 1;
-	newPerson.list->si_no = newPerson.count;
+	address_book->count++;
+	// address_book->list
 	
 }
 
