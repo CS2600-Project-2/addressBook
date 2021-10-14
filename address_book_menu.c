@@ -293,7 +293,7 @@ Status delete_contact(AddressBook *address_book)
 			case e_second_opt:
 				field = 0;
 				printf("Enter the Name: ");
-				scanf("%s", &searchFor);
+				scanf("%s", searchFor);
 				search(searchFor, address_book, address_book->count, field,
 				"Press: [s] = Select, [q] | Cancel: ", e_delete);
 				option = get_option(CHAR, "");
@@ -305,7 +305,7 @@ Status delete_contact(AddressBook *address_book)
 			case e_third_opt:
 				field = 1;
 				printf("Enter the Phone No: ");
-				scanf("%s", &searchFor);
+				scanf("%s", searchFor);
 				search(searchFor, address_book, address_book->count, field,
 						"Press: [s] = Select, [q] | Cancel: ", e_delete);
 				option = get_option(CHAR, "");
@@ -316,7 +316,7 @@ Status delete_contact(AddressBook *address_book)
 				break;
 			case e_fourth_opt:
 				field = 2; 
-				scanf("%s", &searchFor);
+				scanf("%s", searchFor);
 				search(searchFor, address_book, address_book->count, field,
 						"Press: [s] = Select, [q] | Cancel: ", e_delete);
 				option = get_option(CHAR, "");
@@ -346,7 +346,7 @@ Status delete_contact(AddressBook *address_book)
 		phoneEntry++;
 	}
 
-	for(; phoneEntry <= PHONE_NUMBER_COUNT; phoneEntry++);
+	for(; phoneEntry <= PHONE_NUMBER_COUNT; phoneEntry++)
 	{	
 		if(&entry->phone_numbers[phoneEntry-1][0]!=NULL)
 		{
@@ -362,7 +362,7 @@ Status delete_contact(AddressBook *address_book)
 		emailEntry++;
 	}
 
-	for(; emailEntry <= EMAIL_ID_COUNT; emailEntry++);
+	for(; emailEntry <= EMAIL_ID_COUNT; emailEntry++)
 	{	
 		if(&entry->email_addresses[emailEntry-1][0]!=NULL)
 		{
