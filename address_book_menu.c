@@ -160,11 +160,12 @@ Status add_contacts(AddressBook *address_book)
 	int option;
 	int phoneEntry = 1;
 	int emailEntry = 1;
-	char nameChar[32];
-	char phoneChar[32];
-	char emailChar[32];
 	ContactInfo newContact;
-	newContact.si_no = address_book->list->si_no + 1;
+	newContact = address_book->list;
+	for (int i = 0; i < address_book->count; i++)
+	{
+		newContact++;
+	}
 
 	menu_header("Add Contact:\n");
 	printf("0. Back\n");
@@ -209,7 +210,6 @@ Status add_contacts(AddressBook *address_book)
 	}
 
 	address_book->count++;
-	// address_book->list
 	
 }
 //(string to search, addressbook, ?, what field, ??, modes?)
