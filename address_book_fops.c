@@ -8,52 +8,95 @@
 
 #include "address_book.h"
 
-//taken from stackOverflow: https://stackoverflow.com/questions/12911299/read-csv-file-in-c
-const char* getfield(char* line, int num)
-{
-    const char* tok;
-    for (tok = strtok(line, ",");
-            tok && *tok;
-            tok = strtok(NULL, ";\n"))
-    {
-        if (!--num)
-            return tok;
-    }
-    return NULL;
-}
-
 Status load_file(AddressBook *address_book)
 {
 	int ret;
-	char fname[1024];
+	char buff[500];
+	char work_buff[500], *ch, *ch_inbuff;
+	ContactInfo *contactNum;
+	address_book->list = malloc(10 *sizeof(ContactInfo));
+	contactNum = address_book->list;
+	ret = access(DEFAULT_FILE, F_OK);
+	int i = 0;
+	address_book->count = 0;
 
 	//if there are no issues, access should return 0
-	if(access(DEFAULT_FILE, F_OK) == 0 ){
+	if(ret == 0 ){
 		/* 
 		 * Do the neccessary step to open the file
 		 * Do error handling
-		 */ 
-
-		FILE* stream = fopen(DEFAULT_FILE, "r");
-		char line[1024];
-		while (fgets(line, 1024, stream))
+		 */
+		address_book->fp = fopen(DEFAULT_FILE, "r");
+		while(1)
 		{
-			//strdup means string duplicate. In this case, it duplicates the
-			char* tmp = strdup(line);
-			printf("Field 3 would be %s\n", getfield(tmp, 3));
-			// NOTE strtok clobbers tmp
-			free(tmp);
-		}
+			if(fgets(buff, sizeof(buff), address_book->fp) != NULL)
+			{
+				contactNum->si_no = atoi(buff);
+			}
+			else
+			{
+				break;
+			}
+			if(fgets(buff, sizeof(buff), address_book->fp) != NULL)
+			{
+				//Working with string component of the csv file
+				strcpy(work_buff, buff);
+				//pointer to the first occurance of ','
+				ch = strchr(work_buff, ',');
+				if (ch)
+					*ch = 0;
+				strcpy(&contactNum->name[0][0], work_buff);
+				//printf("%s\n", work_buff);
+				//printf("%s\n", &contactNum->name[0][0]);
+				
+				//dealing with phone numbers
+				ch_inbuff = buff;
+				for(i = 0; i < 5; i++)
+				{
+					ch_inbuff = strchr(ch_inbuff, ',');
+					if (ch_inbuff)
+						ch_inbuff++;
+					strcpy(work_buff,ch_inbuff);
+					ch = strchr(work_buff, ',');
+					if(ch)
+						*ch = 0;
+					strcpy(&contactNum->phone_numbers[i][0], work_buff);
+					//printf("%s\n", work_buff);
+					//printf("%s\n", &contactNum->phone_numbers[i][0]);
+				}
 
-		return e_success;
+				//dealing with emails
+				for(i = 0; i < 5; i++)
+				{
+					ch_inbuff = strchr(ch_inbuff, ',');
+					if (ch_inbuff)
+						ch_inbuff++;
+					strcpy(work_buff,ch_inbuff);
+					ch = strchr(work_buff, ',');
+					if(ch)
+						*ch = 0;
+					strcpy(&contactNum->email_addresses[i][0], work_buff);
+					//printf("%s\n", &contactNum->email_addresses[i][0]);
+				}
+
+
+			    address_book->count++;
+			    contactNum++;
+			}
+			else
+			{
+				break;
+			}
+		}
 	}
+
 	else
 	{
-		//if there is no file given, allocate 10 spaces and go back
-		address_book = malloc(10 *sizeof(ContactInfo));
-		return e_success;
+		/*Create a file for adding entries*/
+		address_book->fp = fopen(DEFAULT_FILE, "a");
 	}
 
+	fclose(address_book->fp);
 	return e_success;
 }
 
@@ -76,6 +119,7 @@ Status save_file(AddressBook *address_book)
 	 */ 
 
 	fclose(address_book->fp);
-
+	free(address_book->list);
+	
 	return e_success;
 }

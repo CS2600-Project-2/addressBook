@@ -26,6 +26,6 @@ int main(void)
 			save_prompt(&address_book);
 		}
 	}
-
+	
 	return 0;
 }
