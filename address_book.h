@@ -64,6 +64,7 @@ typedef enum
 	e_save
 } MenuFeatures;
 
+//one name can have have multiple numbers and emails
 typedef struct
 {
 	char name[NAME_COUNT][NAME_LEN];
