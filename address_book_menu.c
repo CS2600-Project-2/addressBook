@@ -267,9 +267,10 @@ Status delete_contact(AddressBook *address_book)
 	int serialNum;
 	int field;
 	char searchFor[32];
-
 	int phoneEntry = 1;
 	int emailEntry = 1;
+	ContactInfo *entry;
+	entry = address_book->list;
 
 	menu_header("Search Contact to delete by:\n");
 
@@ -330,23 +331,46 @@ Status delete_contact(AddressBook *address_book)
 
 	printf("Select a Serial Number (S.No) to Delete: ");
 	serialNum = get_option(NUM, "");
+	entry += (serialNum-1);
 	
 	menu_header("Delete Contact:\n");
 	printf("0. Back\n");
-	printf("1. Name       : %s\n", address_book->list[serialNum-1].name);
+	printf("1. Name       : %s\n", &entry->name[0][0]);
 
-	printf("2. Phone No 1 : %s\n", address_book->list[serialNum-1].phone_numbers[0]);
-	for(; phoneEntry < PHONE_NUMBER_COUNT; phoneEntry++);
+	//Printing out phone numbers
+	printf("2. Phone No 1 : ");
+	if(&entry->phone_numbers[0][0]!=NULL)
 	{
-		printf("   Phone No %d : %s\n", phoneEntry, address_book->list[serialNum-1].phone_numbers[phoneEntry-1]);
+		printf("%s", &entry->phone_numbers[0][0]);
+		phoneEntry++;
 	}
 
-	printf("3. Email No 1 : %s\n", address_book->list[serialNum-1].phone_numbers[0]); 
-	for(; emailEntry < PHONE_NUMBER_COUNT; emailEntry++);
+	for(; phoneEntry <= PHONE_NUMBER_COUNT; phoneEntry++);
+	{	
+		if(&entry->phone_numbers[phoneEntry-1][0]!=NULL)
+		{
+			printf("   Phone No %d : %s\n", phoneEntry, &entry->phone_numbers[phoneEntry-1][0]);
+		}
+	}
+
+	//Printing out email addresses
+	printf("3. Email ID 1 : "); 
+	if(&entry->email_addresses[0][0]!=NULL)
 	{
-		printf("   Phone No %d : %s\n", emailEntry, address_book->list[serialNum-1].phone_numbers[emailEntry-1]);
+		printf("%s", &entry->email_addresses[0][0]);
+		emailEntry++;
+	}
+
+	for(; emailEntry <= EMAIL_ID_COUNT; emailEntry++);
+	{	
+		if(&entry->email_addresses[emailEntry-1][0]!=NULL)
+		{
+			printf("   Email ID %d : %s\n", emailEntry, &entry->email_addresses[emailEntry-1][0]);
+		}
 	}
 	
+
+
 	printf("Enter 'Y' to delete. [Press any key to ignore]: ");
 	option = get_option(CHAR,"");
 	if(option != 'Y'||option != 'y')
