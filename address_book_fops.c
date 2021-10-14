@@ -12,6 +12,7 @@ Status load_file(AddressBook *address_book)
 {
 	int ret;
 	char buff[500];
+	char work_buff[500], *ch, *ch_inbuff;
 	ContactInfo *contactNum;
 	address_book->list = malloc(10 *sizeof(ContactInfo));
 	contactNum = address_book->list;
@@ -38,6 +39,47 @@ Status load_file(AddressBook *address_book)
 			}
 			if(fgets(buff, sizeof(buff), address_book->fp) != NULL)
 			{
+				//Working with string component of the csv file
+				strcpy(work_buff, buff);
+				//pointer to the first occurance of ','
+				ch = strchr(work_buff, ',');
+				if (ch)
+					*ch = 0;
+				strcpy(&contactNum->name[0][0], work_buff);
+				//printf("%s\n", work_buff);
+				//printf("%s\n", &contactNum->name[0][0]);
+				
+				//dealing with phone numbers
+				ch_inbuff = buff;
+				for(i = 0; i < 5; i++)
+				{
+					ch_inbuff = strchr(ch_inbuff, ',');
+					if (ch_inbuff)
+						ch_inbuff++;
+					strcpy(work_buff,ch_inbuff);
+					ch = strchr(work_buff, ',');
+					if(ch)
+						*ch = 0;
+					strcpy(&contactNum->phone_numbers[i][0], work_buff);
+					//printf("%s\n", work_buff);
+					//printf("%s\n", &contactNum->phone_numbers[i][0]);
+				}
+
+				//dealing with emails
+				for(i = 0; i < 5; i++)
+				{
+					ch_inbuff = strchr(ch_inbuff, ',');
+					if (ch_inbuff)
+						ch_inbuff++;
+					strcpy(work_buff,ch_inbuff);
+					ch = strchr(work_buff, ',');
+					if(ch)
+						*ch = 0;
+					strcpy(&contactNum->email_addresses[i][0], work_buff);
+					//printf("%s\n", &contactNum->email_addresses[i][0]);
+				}
+
+
 			    address_book->count++;
 			    contactNum++;
 			}
@@ -47,7 +89,7 @@ Status load_file(AddressBook *address_book)
 			}
 		}
 	}
-	
+
 	else
 	{
 		/*Create a file for adding entries*/
