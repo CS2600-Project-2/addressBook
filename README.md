@@ -5,9 +5,15 @@ I have changed the parameters for list_contacts in the header file. I couldn't f
 
 Things left to work on:
   get_option (it only returns int, so please don't compare it with chars)
+  
   fix list contacts to show 5 entries per page (real annoying)
+  
   fixing add_contacts
+  
   all menus must loop back according to the documentation (just make a do while loop)
+  
   lots and lots of debugging
+  
   testing with csv file
+  
   film output in a youtube video
