@@ -4,6 +4,7 @@ I have changed the parameters for list_contacts in the header file. I couldn't f
 
 
 Things left to work on:
+
   get_option (it only returns int, so please don't compare it with chars)
   
   fix list contacts to show 5 entries per page (real annoying)
