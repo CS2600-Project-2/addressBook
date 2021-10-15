@@ -448,7 +448,7 @@ Status delete_contact(AddressBook *address_book)
 	ContactInfo *curEntry, *nextEntry;
 	entry = address_book->list;
 
-	/*Initial Menu to delete contact*/
+	/*Initial Menu Search Contact to Delete by*/
 	menu_header("Search Contact to delete by:\n");
 	printf("0. Back\n");
 	printf("1. Name\n");
@@ -519,73 +519,108 @@ Status delete_contact(AddressBook *address_book)
 				}
 				printf("Enter the Email ID: ");
 				break;
+			//Delete by Serial Number will go straight to asking
 			case e_fifth_opt:
 				break;
 		}
-
+	//Confirm the serial number
 	printf("Select a Serial Number (S.No) to Delete: ");
 	serialNum = get_option(NUM, "");
+	//Error handling for serial numbers out of range
+	if(serialNum<0||serialNum>address_book->count) 
+	{
+		printf("Sorry that Serial Number is out of range... returning to main menu");
+		return e_back;
+	}
+	//Increment the entry pointer to the right ContactInfo struct
 	entry += (serialNum-1);
-	
+
+
+	/*Second Menu for Delete Contact*/
+	//Displays the contacts name phone numbers and email addresses
 	menu_header("Delete Contact:\n");
 	printf("0. Back\n");
+	//Print name of contact
 	printf("1. Name       : %s\n", &entry->name[0][0]);
-
 	//Printing out phone numbers
 	printf("2. Phone No 1 : ");
+	//Verify there is a string to print
 	if(&entry->phone_numbers[0][0]!=NULL)
 	{
+		//Print first phone number and increment
 		printf("%s", &entry->phone_numbers[0][0]);
 		phoneEntry++;
 	}
-
+	//For loop to print phone entries after 1
 	for(phoneEntry = 1; phoneEntry <= PHONE_NUMBER_COUNT; phoneEntry++)
 	{	
+		//Verify there is a string to print
 		if(&entry->phone_numbers[phoneEntry-1][0]!=NULL)
 		{
 			printf("   Phone No %d : %s\n", phoneEntry, &entry->phone_numbers[phoneEntry-1][0]);
 		}
 	}
-
 	//Printing out email addresses
 	printf("3. Email ID 1 : "); 
+	//Verify there is a string to print
 	if(&entry->email_addresses[0][0]!=NULL)
 	{  
+		//Print first email address and increment
 		printf("%s", &entry->email_addresses[0][0]);
 		emailEntry++;
 	}
-
+	//For loop to print phone entries after 1
 	for(emailEntry = 1; emailEntry <= EMAIL_ID_COUNT; emailEntry++)
 	{	
+		//Verify there is a string to print
 		if(&entry->email_addresses[emailEntry-1][0]!=NULL)
 		{
 			printf("   Email ID %d : %s\n", emailEntry, &entry->email_addresses[emailEntry-1][0]);
 		}
 	}
-	
+	//After we print menu verify the user wants to delete
 	printf("Enter 'Y' to delete. [Press any key to ignore]: ");
 	option = get_option(CHAR,"");
+	//Return to main menu if user does not pres 'y' or 'Y'
 	if(option != 'Y'||option != 'y')
 	{
 		return e_back;
 	}
 
-    curEntry = entry;
-	nextEntry = entry+1;
-	for(; serialNum <= address_book->count; serialNum++)
+	/*Deleting contacts*/
+	//Delete the last contact
+	if(serialNum == address_book->count)
 	{
-		nextEntry->si_no = curEntry->si_no;
-		memcpy(curEntry, nextEntry, sizeof(ContactInfo));
-		curEntry++;
-		if (nextEntry->si_no < address_book->count)
-			nextEntry = curEntry + 1;
-		//entry->si_no = serialNum;
-		//entry++;
+		//Setting all fields equal to null
+		memset(entry,0,sizeof(ContactInfo));
 	}
+	else
+	{	
+		/*Shift contacts up one position delete the last contact*/
+		//Pointer to contact we want to delete and subsequent contact
+    	curEntry = entry;
+		nextEntry = entry+1;
+		//Loop starting at serial number looping to the end of count
+		for(; serialNum < address_book->count; serialNum++)
+		{	
+			//Copy serial num of current to next contact
+			nextEntry->si_no = curEntry->si_no;
+			//Copy next contact with updated serial number to current contact
+			memcpy(curEntry, nextEntry, sizeof(ContactInfo));
+			//Increment pointer 
+			curEntry++;
+			//Check before we increment nextEntry on the last iteration of loop 
+			//we don't want to increment the pointer because it may point out of bounds
+			if (nextEntry->si_no < address_book->count)
+				nextEntry = curEntry + 1;
+			//Increment loop checker
+			serialNum++;
+		}
+		//Setting all fields equal to null for last contact
+		memset(curEntry,0,sizeof(ContactInfo));
+	}
+	//Decrementing count to update total contact count
 	address_book->count--;
 	return e_success;
-
-
-	
 
 }
