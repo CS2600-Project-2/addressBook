@@ -128,11 +128,15 @@ Status load_file(AddressBook *address_book)
 
 Status save_file(AddressBook *address_book)
 {
+	//Pointer of type contact pointing to the first contact
 	ContactInfo *contactNum;
 	contactNum = address_book->list;
+	//We will use this to loop through contacts
 	int currentEntry;
-	int phoneCount, emailCount;
 	int totalEntries = address_book->count;
+	//We will use these to loop through phone_numbers and email_addresses
+	int phoneCount, emailCount;
+
 	/*
 	 * Write contacts back to file.
 	 * Re write the complete file currently
