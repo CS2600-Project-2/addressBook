@@ -2,7 +2,8 @@
 #define ADDRESS_BOOK_H
 
 #define DEFAULT_FILE				"address_book.csv"
-
+/* Maximum amount of contacts  */
+#define MAX_CONTACTS                20
 /* Length of a contact name  */
 #define NAME_LEN					32
 /* Length of a phone number */
