@@ -93,7 +93,7 @@ Status list_contacts(AddressBook *address_book, int *index, Modes mode,const cha
 			printf("=================================================================================================\n");
 		}
 	}
-	print(msg);
+	printf(msg);
 }
 
 void menu_header(const char *str)
