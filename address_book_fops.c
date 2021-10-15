@@ -141,7 +141,7 @@ Status save_file(AddressBook *address_book)
 	 * Write contacts back to file.
 	 * Re write the complete file currently
 	 */ 
-	address_book->fp = fopen("test.csv", "w");
+	address_book->fp = fopen(DEFAULT_FILE, "w");
 
 	if (address_book->fp == NULL)
 	{
