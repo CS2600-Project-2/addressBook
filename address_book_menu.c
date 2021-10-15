@@ -13,14 +13,23 @@
 //USER INPUT PROCESSING
 int get_option(int type, const char *msg)
 {
-	/*
-	 * Mutilfuction user intractions like
-	 * Just an enter key detection
-	 * Read an number
-	 * Read a charcter
-	 */ 
+// #Just an enter key detection
+if (getchar() == '\n') {
+	printf("Enter key is pressed");
+	Sleep(1000); //wait for check printed message.
+break;
+}
 
-	/* Fill the code to add above functionality */
+// * Read an number
+	int a;
+	int x = int x = scanf("%d", &a);
+		printf("Number is : %d\n",a);
+		printf("Return Value: %d",x);
+
+// * Read a charcter
+char ch;
+	scanf("%c", &ch);
+	printf("Character is : %d\n",ch);
 }
 
 Status save_prompt(AddressBook *address_book)
