@@ -446,9 +446,11 @@ Status delete_contact(AddressBook *address_book)
 	int serialNum;
 	int field;
 	char searchFor[32];
-
 	int phoneEntry = 1;
 	int emailEntry = 1;
+	ContactInfo *entry;
+	ContactInfo *curEntry, *nextEntry;
+	entry = address_book->list;
 
 	menu_header("Search Contact to delete by:\n");
 
@@ -466,11 +468,10 @@ Status delete_contact(AddressBook *address_book)
 		{
 			case e_first_opt:
 				return e_back;
-				break;
 			case e_second_opt:
 				field = 0;
 				printf("Enter the Name: ");
-				scanf("%s", &searchFor);
+				scanf("%s", searchFor);
 				search(searchFor, address_book, address_book->count, field,
 				"Press: [s] = Select, [q] | Cancel: ", e_delete);
 				option = get_option(CHAR, "");
@@ -482,7 +483,7 @@ Status delete_contact(AddressBook *address_book)
 			case e_third_opt:
 				field = 1;
 				printf("Enter the Phone No: ");
-				scanf("%s", &searchFor);
+				scanf("%s", searchFor);
 				search(searchFor, address_book, address_book->count, field,
 						"Press: [s] = Select, [q] | Cancel: ", e_delete);
 				option = get_option(CHAR, "");
@@ -493,7 +494,7 @@ Status delete_contact(AddressBook *address_book)
 				break;
 			case e_fourth_opt:
 				field = 2; 
-				scanf("%s", &searchFor);
+				scanf("%s", searchFor);
 				search(searchFor, address_book, address_book->count, field,
 						"Press: [s] = Select, [q] | Cancel: ", e_delete);
 				option = get_option(CHAR, "");
@@ -509,21 +510,42 @@ Status delete_contact(AddressBook *address_book)
 
 	printf("Select a Serial Number (S.No) to Delete: ");
 	serialNum = get_option(NUM, "");
+	entry += (serialNum-1);
 	
 	menu_header("Delete Contact:\n");
 	printf("0. Back\n");
-	printf("1. Name       : %s\n", address_book->list[serialNum-1].name);
+	printf("1. Name       : %s\n", &entry->name[0][0]);
 
-	printf("2. Phone No 1 : %s\n", address_book->list[serialNum-1].phone_numbers[0]);
-	for(; phoneEntry < PHONE_NUMBER_COUNT; phoneEntry++);
+	//Printing out phone numbers
+	printf("2. Phone No 1 : ");
+	if(&entry->phone_numbers[0][0]!=NULL)
 	{
-		printf("   Phone No %d : %s\n", phoneEntry, address_book->list[serialNum-1].phone_numbers[phoneEntry-1]);
+		printf("%s", &entry->phone_numbers[0][0]);
+		phoneEntry++;
 	}
 
-	printf("3. Email No 1 : %s\n", address_book->list[serialNum-1].phone_numbers[0]); 
-	for(; emailEntry < PHONE_NUMBER_COUNT; emailEntry++);
-	{
-		printf("   Phone No %d : %s\n", emailEntry, address_book->list[serialNum-1].phone_numbers[emailEntry-1]);
+	for(; phoneEntry <= PHONE_NUMBER_COUNT; phoneEntry++)
+	{	
+		if(&entry->phone_numbers[phoneEntry-1][0]!=NULL)
+		{
+			printf("   Phone No %d : %s\n", phoneEntry, &entry->phone_numbers[phoneEntry-1][0]);
+		}
+	}
+
+	//Printing out email addresses
+	printf("3. Email ID 1 : "); 
+	if(&entry->email_addresses[0][0]!=NULL)
+	{  
+		printf("%s", &entry->email_addresses[0][0]);
+		emailEntry++;
+	}
+
+	for(; emailEntry <= EMAIL_ID_COUNT; emailEntry++)
+	{	
+		if(&entry->email_addresses[emailEntry-1][0]!=NULL)
+		{
+			printf("   Email ID %d : %s\n", emailEntry, &entry->email_addresses[emailEntry-1][0]);
+		}
 	}
 	
 	printf("Enter 'Y' to delete. [Press any key to ignore]: ");
@@ -532,5 +554,23 @@ Status delete_contact(AddressBook *address_book)
 	{
 		return e_back;
 	}
+
+    curEntry = entry;
+	nextEntry = entry+1;
+	for(; serialNum <= address_book->count; serialNum++)
+	{
+		nextEntry->si_no = curEntry->si_no;
+		memcpy(curEntry, nextEntry, sizeof(ContactInfo));
+		curEntry++;
+		if (nextEntry->si_no < address_book->count)
+			nextEntry = curEntry + 1;
+		//entry->si_no = serialNum;
+		//entry++;
+	}
+	address_book->count--;
+	return e_success;
+
+
+	
 
 }
