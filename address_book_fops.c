@@ -102,6 +102,11 @@ Status load_file(AddressBook *address_book)
 
 Status save_file(AddressBook *address_book)
 {
+	ContactInfo *contactNum;
+	contactNum = address_book->list;
+	int currentEntry;
+	int phoneCount, emailCount;
+	int totalEntries = address_book->count;
 	/*
 	 * Write contacts back to file.
 	 * Re write the complete file currently
@@ -117,30 +122,42 @@ Status save_file(AddressBook *address_book)
 	 * Add the logic to save the file
 	 * Make sure to do error handling
 	 */ 
-	ContactInfo *contactNum;
-	contactNum = address_book->list;
-	int loop = 0;
-	char nameChar[32], phoneChar[500], emailCHar[500];
+	//saving the contact infro to back to csv file
+	for(currentEntry = 0; currentEntry<totalEntries; currentEntry++)
+	{
+		//printing the serial number newline for the rest of info
+		fprintf(address_book->fp, "%d\n", contactNum->si_no);
+		//printing the name
+		fprintf(address_book->fp, "%s,", &contactNum->name[0][0]);
 
-	while(1 && loop < address_book->count) {
-		fputc(contactNum->si_no, address_book->fp);
-		strcpy(nameChar, contactNum->name[0] + ',');
-		fputs(nameChar, address_book->fp);
-		for (int i = 0; i < 5; i++) {
-			strcat(phoneChar, contactNum->phone_numbers[i] + ',');
+		//printing phone numbers
+		for(phoneCount = 0; phoneCount < 5; phoneCount++)
+		{
+			//if there is no phonenumber don't print
+			if(&contactNum->phone_numbers[phoneCount][0]!=NULL)
+			{
+				fprintf(address_book->fp, "%s", &contactNum->phone_numbers[phoneCount][0]);
+			}
+			fprintf(address_book->fp,",");
 		}
-		strcat(phoneChar, ",,,,");
-		fputs(phoneChar, address_book->fp);
 
-
-		for (int i = 0; i < 5; i++) {
-			strcat(emailCHar, contactNum->email_addresses[i] + ',');
+		//printing emails
+		for(emailCount = 0; emailCount < 5; emailCount++)
+		{
+			if(&contactNum->email_addresses[emailCount][0]!=NULL)
+			{
+				//if there is no email don't print
+				fprintf(address_book->fp, "%s", &contactNum->email_addresses[emailCount][0]);
+			}
+			fprintf(address_book->fp,",");
 		}
-		fputs(emailCHar, address_book->fp);
+		//new line for next contact
+		fprintf(address_book->fp,"\n");
+		//move to the next contact
+		contactNum++;
+
 	}
 
 	fclose(address_book->fp);
-	free(address_book->list);
-	
 	return e_success;
 }

@@ -20,7 +20,7 @@ int get_option(int type, const char *msg)
 	 */ 
 
 	/* Fill the code to add above functionality */
-	
+
 }
 
 Status save_prompt(AddressBook *address_book)
@@ -311,7 +311,6 @@ Status delete_contact(AddressBook *address_book)
 		{
 			case e_first_opt:
 				return e_back;
-				break;
 			case e_second_opt:
 				field = 0;
 				printf("Enter the Name: ");
