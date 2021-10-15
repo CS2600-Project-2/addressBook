@@ -433,61 +433,85 @@ Status edit_contact(AddressBook *address_book)
 Status delete_contact(AddressBook *address_book)
 {
 	/* Add the functionality for delete contacts here */	
+	//Using this to store user input
 	int option;
 	int serialNum;
+	//Field represents Name=0, Phone=1, or Email=2 
 	int field;
+	//Using these in a for loop to print avaliable names and phone numbers
+	int phoneEntry;
+	int emailEntry;
+	//User input for name, number, email
 	char searchFor[32];
-	int phoneEntry = 1;
-	int emailEntry = 1;
+	//Various pointers we will use to access fields and delete contacts
 	ContactInfo *entry;
 	ContactInfo *curEntry, *nextEntry;
 	entry = address_book->list;
 
+	/*Initial Menu to delete contact*/
 	menu_header("Search Contact to delete by:\n");
-
 	printf("0. Back\n");
 	printf("1. Name\n");
 	printf("2. Phone No\n");
 	printf("3. Email No\n"); 
 	printf("4. Serial No\n");
-
 	printf("\n");
 	printf("Please select an option: ");
-	option = get_option(NUM, "");
 
+	//Get the user input option and use it for switch
+	option = get_option(NUM, "");
 	switch (option)
 		{
+			//Back to main menu
 			case e_first_opt:
 				return e_back;
+			//Delete by name
 			case e_second_opt:
+				//Set appropriate field for name, search function will need it
 				field = 0;
+				//Get the name and store it in searchFor
 				printf("Enter the Name: ");
 				scanf("%s", searchFor);
+				//Call the search function
+				//Will print contacts with matching names and ask user to select 's' or quit 'q'
 				search(searchFor, address_book, address_book->count, field,
-				"Press: [s] = Select, [q] | Cancel: ", e_delete);
+						"Press: [s] = Select, [q] | Cancel: ", e_delete);
+				//Store their option, return to menu if they chose to quit 'q'
 				option = get_option(CHAR, "");
 				if(option == 'q')
 				{
 					return e_back;
 				}
 				break;
+			//Delete by phone number
 			case e_third_opt:
+				//Set appropriate field for phone number, search function will need it
 				field = 1;
+				//Get the phone number and store it in searchFor
 				printf("Enter the Phone No: ");
 				scanf("%s", searchFor);
+				//Call the search function
+				//Will print contacts with matching phone numbers and ask user to select 's' or quit 'q'
 				search(searchFor, address_book, address_book->count, field,
 						"Press: [s] = Select, [q] | Cancel: ", e_delete);
+				//Store their option, return to menu if they chose to quit 'q'
 				option = get_option(CHAR, "");
 				if(option == 'q')
 				{
 					return e_back;
 				}
 				break;
+			//Delete by email
 			case e_fourth_opt:
+				//Set appropriate field for email, search function will need it
 				field = 2; 
+				//Get the email and store it in searchFor
 				scanf("%s", searchFor);
+				//Call the search function
+				//Will print contacts with matching phone numbers and ask user to select 's' or quit 'q'
 				search(searchFor, address_book, address_book->count, field,
 						"Press: [s] = Select, [q] | Cancel: ", e_delete);
+				//Store their option, return to menu if they chose to quit 'q'
 				option = get_option(CHAR, "");
 				if(option == 'q')
 				{
@@ -515,7 +539,7 @@ Status delete_contact(AddressBook *address_book)
 		phoneEntry++;
 	}
 
-	for(; phoneEntry <= PHONE_NUMBER_COUNT; phoneEntry++)
+	for(phoneEntry = 1; phoneEntry <= PHONE_NUMBER_COUNT; phoneEntry++)
 	{	
 		if(&entry->phone_numbers[phoneEntry-1][0]!=NULL)
 		{
@@ -531,7 +555,7 @@ Status delete_contact(AddressBook *address_book)
 		emailEntry++;
 	}
 
-	for(; emailEntry <= EMAIL_ID_COUNT; emailEntry++)
+	for(emailEntry = 1; emailEntry <= EMAIL_ID_COUNT; emailEntry++)
 	{	
 		if(&entry->email_addresses[emailEntry-1][0]!=NULL)
 		{
