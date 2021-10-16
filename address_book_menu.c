@@ -628,17 +628,16 @@ Status delete_contact(AddressBook *address_book)
 		//Printing out phone numbers
 		printf("2. Phone No 1 : ");
 		//Verify there is a string to print
-		if(&entry->phone_numbers[0][0]!=NULL)
+		if(strlen(&entry->phone_numbers[0][0])>0)
 		{
 			//Print first phone number and increment
-			printf("%s", &entry->phone_numbers[0][0]);
-			phoneEntry++;
+			printf("%s\n", &entry->phone_numbers[0][0]);
 		}
-		//For loop to print phone entries after 1
-		for(phoneEntry = 1; phoneEntry <= PHONE_NUMBER_COUNT; phoneEntry++)
+		//For loop to print phone entries starting at 2
+		for(phoneEntry = 2; phoneEntry <= PHONE_NUMBER_COUNT; phoneEntry++)
 		{	
 			//Verify there is a string to print
-			if(&entry->phone_numbers[phoneEntry-1][0]!=NULL)
+			if(strlen(&entry->phone_numbers[phoneEntry-1][0])>0)
 			{
 				printf("   Phone No %d : %s\n", phoneEntry, &entry->phone_numbers[phoneEntry-1][0]);
 			}
@@ -646,17 +645,16 @@ Status delete_contact(AddressBook *address_book)
 		//Printing out email addresses
 		printf("3. Email ID 1 : "); 
 		//Verify there is a string to print
-		if(&entry->email_addresses[0][0]!=NULL)
+		if(strlen(&entry->email_addresses[0][0])>0)
 		{  
 			//Print first email address and increment
-			printf("%s", &entry->email_addresses[0][0]);
-			emailEntry++;
+			printf("%s\n", &entry->email_addresses[0][0]);
 		}
-		//For loop to print phone entries after 1
-		for(emailEntry = 1; emailEntry <= EMAIL_ID_COUNT; emailEntry++)
+		//For loop to print phone entries starting at 2
+		for(emailEntry = 2; emailEntry <= EMAIL_ID_COUNT; emailEntry++)
 		{	
 			//Verify there is a string to print
-			if(&entry->email_addresses[emailEntry-1][0]!=NULL)
+			if(strlen(&entry->email_addresses[emailEntry-1][0])>0)
 			{
 				printf("   Email ID %d : %s\n", emailEntry, &entry->email_addresses[emailEntry-1][0]);
 			}
