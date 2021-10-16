@@ -14,15 +14,16 @@ int main(void)
 
 	/* Load the file from .csv file if any */
 	ret = load_file(&address_book);
-
+	
 	if (ret == e_success)
 	{
+		printf("WHOOOOOOOOOOOOOOOOOOOOOOOOOOO");
 		/* Show all the available menu */
 		ret = menu(&address_book);
-
+		
 		if (ret == e_success)
 		{
-			/* Save the entries */
+			/* Save the entries*/
 			save_prompt(&address_book);
 		}
 	}
@@ -51,3 +52,5 @@ printf( "\nYou entered: ");
 	
 	return 0;
 }
+
+
