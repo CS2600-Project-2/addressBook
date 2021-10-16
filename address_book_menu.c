@@ -20,16 +20,23 @@ if (getchar() == '\n') {
 		break;
 }
 
-// * Read an number
-	int a;
-	int x = scanf("%d", &a);
-		printf("Number is : %d\n",a);
-		printf("Return Value: %d",x);
+switch(type)
+{
+	case NUM:
+	// * Read an number
+		int a;
+		int x = scanf("%d", &a);
+			printf("Number is : %d\n",a);
+			printf("Return Value: %d",x);
+	case CHAR:
+		// * Read a charcter
+		char ch;
+		scanf("%c", &ch);
+		printf("Character is : %d\n",ch);
 
-// * Read a charcter
-char ch;
-	scanf("%c", &ch);
-	printf("Character is : %d\n",ch);
+	case NONE:
+		break;
+}
 }
 
 Status save_prompt(AddressBook *address_book)
