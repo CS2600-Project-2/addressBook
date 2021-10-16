@@ -17,12 +17,12 @@ int get_option(int type, const char *msg)
 if (getchar() == '\n') {
 	printf("Enter key is pressed");
 	Sleep(1000); //wait for check printed message.
-break;
+		break;
 }
 
 // * Read an number
 	int a;
-	int x = int x = scanf("%d", &a);
+	int x = scanf("%d", &a);
 		printf("Number is : %d\n",a);
 		printf("Return Value: %d",x);
 
