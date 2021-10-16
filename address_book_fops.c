@@ -181,8 +181,12 @@ Status save_file(AddressBook *address_book)
 			}
 			fprintf(address_book->fp,",");
 		}
-		//new line for next contact
-		fprintf(address_book->fp,"\n");
+		//new line for next contact 
+		//don't print if it is last contact to be printed
+		if(currentEntry<address_book->count-1)
+		{
+			fprintf(address_book->fp,"\n");
+		}
 		//move to the next contact
 		contactNum++;
 
