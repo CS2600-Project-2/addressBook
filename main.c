@@ -27,7 +27,9 @@ int main(void)
 			save_prompt(&address_book);
 		}
 	}
-	//Declare the variables
+}
+/*
+//Declare the variables
 
     int num;
 	int c;
@@ -50,7 +52,6 @@ printf( "Enter a value :");
 printf( "\nYou entered: ");
    putchar( c ); return 0; 
 	
-	return 0;
-}
+	return 0;*/
 
 

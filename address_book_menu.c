@@ -13,30 +13,37 @@
 //USER INPUT PROCESSING
 int get_option(int type, const char *msg)
 {
-// #Just an enter key detection
-if (getchar() == '\n') {
-	printf("Enter key is pressed");
-	Sleep(1000); //wait for check printed message.
-		break;
-}
+	int result = -1;
+	if(type == NUM){
+		int num;
+		scanf("%i\n", &num);
+		result = num;
 
-switch(type)
-{
-	case NUM:
-	// * Read an number
-		int a;
-		int x = scanf("%d", &a);
-			printf("Number is : %d\n",a);
-			printf("Return Value: %d",x);
-	case CHAR:
-		// * Read a charcter
-		char ch;
-		scanf("%c", &ch);
-		printf("Character is : %d\n",ch);
-
-	case NONE:
-		break;
-}
+	}else if(type == CHAR){
+		char input;
+		while(result == -1){
+			scanf("%c\n",&input);
+			switch(input){
+				case 'q':
+					result = e_back;
+					break;
+				case 's':
+					result = e_edit;
+					break;
+				case 'Y':
+				case 'y':
+					result = e_success;
+					break;
+				case 'N':
+				case 'n':
+					result = e_fail;
+					break;
+				default:
+					printf("Not a valid char command. Please try again.");
+			}
+		}
+	}
+	return result;
 }
 
 Status save_prompt(AddressBook *address_book)
@@ -49,14 +56,14 @@ Status save_prompt(AddressBook *address_book)
 		printf("Enter 'N' to Ignore and 'Y' to Save: ");
 		option = get_option(CHAR, "");
 
-		if (option == 0)
+		if (option == e_success)
 		{
 			save_file(address_book);
 			printf("Exiting. Data saved in %s\n", DEFAULT_FILE);
 
 			break;
 		}
-	} while (option != 0);
+	} while (option != e_success);
 
 	free(address_book->list);
 
@@ -71,7 +78,7 @@ Status save_prompt(AddressBook *address_book)
 Status list_contacts(AddressBook *address_book, int *index, Modes mode,const char *msg, int IndexLength)
 {
 	ContactInfo currentEntry = *(address_book->list);
-
+	int option;
 	menu_header("Search Result:\n");
     printf("=================================================================================================\n"); 
 	printf(": S.No\t: Name\t\t\t: Phone No\t\t\t: Email ID\t\t\t:\n");
@@ -89,12 +96,13 @@ Status list_contacts(AddressBook *address_book, int *index, Modes mode,const cha
 			}
 			printf("=================================================================================================\n");
 		}
-		//printf(msg);
-		int option = get_option(CHAR,"");
-		//assume 0 is the response for a "go back" input, q
-		if(option == 0){
-			return e_success;
+		printf(msg);
+
+		while(option != e_back){
+			option = get_option(CHAR,"");
 		}
+		
+		return e_success;
 
 	//if we are listing after a search function call
 	}else{
@@ -108,9 +116,9 @@ Status list_contacts(AddressBook *address_book, int *index, Modes mode,const cha
 			}
 			printf("=================================================================================================\n");
 		}
+		printf(msg);
+		return e_success;
 	}
-	printf(msg);
-	return e_success;
 }
 
 void menu_header(const char *str)
@@ -144,22 +152,18 @@ void main_menu(void)
 //WE NEED TO CREATE MAIN where we load file
 Status menu(AddressBook *address_book)
 {
-	//ContactInfo backup;
-	//Status ret;
 	int option = -1;
 
-	//do
+	do
 	{
 		main_menu();
-
-		option = 0;
-
+		option = get_option(NUM,"");
+	
 		//if we have no entries, you can't do anything but add entries
 		if ((address_book-> count == 0) && (option != e_add_contact))
 		{
-			get_option(NONE, "No entries found!!. Would you like to add? Use Add Contacts");
-
-			//continue;
+			printf("No entries found!!. Would you like to add? Use Add Contacts\n");
+			continue;
 		}
 
 		switch (option)
@@ -217,44 +221,33 @@ Status add_contacts(AddressBook *address_book)
 
 		while (option != e_first_opt) {
 			switch (option)
-				{
-					case e_first_opt:
-						return e_back;
-						break;
-					case e_second_opt:
-						printf("Enter the name: ");
-						scanf("%s", newContact.name[0]);
-					case e_third_opt:
-						if(phoneEntry < 5){
-							printf("Enter Phone Number %i, [Please enter the same option of alternate Phone Number]:\n", phoneEntry);
-							scanf("%s", newContact.phone_numbers[phoneEntry]);
-							phoneEntry++;
-						}else{
-							printf("You have entered the maximum number of phone numbers.\n");
-						}
-						break;
-					case e_fourth_opt:
-						if(emailEntry < 5){
-							printf("Enter Email ID %i, [Please enter the same option of alternate Email ID]:\n", emailEntry);
-							scanf("%s", newContact.email_addresses[emailEntry]);
-							emailEntry++;
-						}else{
-							printf("You have entered the maxium number of email addresses.\n");
-						}
-						break;
-					case e_fifth_opt:
-						break;
-				}
-			/*
-			menu_header("Add Contact:\n");
-			printf("0. Back\n");
-			printf("1. Name       : %s\n", newContact.name[0]);
-			printf("2. Phone No %i: %s\n", phoneEntry, newContact.phone_numbers[phoneEntry]);
-			printf("3. Email ID %i: %s\n", emailEntry, newContact.email_addresses[emailEntry]);
-			printf("\n");
-			printf("Please select an option: ");
-			option = get_option(NUM, "");
-			*/
+			{
+				case e_first_opt:
+					break;
+				case e_second_opt:
+					printf("Enter the name: ");
+					scanf("%s", newContact.name[0]);
+				case e_third_opt:
+					if(phoneEntry < 5){
+						printf("Enter Phone Number %i, [Please enter the same option of alternate Phone Number]:\n", phoneEntry);
+						scanf("%s", newContact.phone_numbers[phoneEntry]);
+						phoneEntry++;
+					}else{
+						printf("You have entered the maximum number of phone numbers.\n");
+					}
+					break;
+				case e_fourth_opt:
+					if(emailEntry < 5){
+						printf("Enter Email ID %i, [Please enter the same option of alternate Email ID]:\n", emailEntry);
+						scanf("%s", newContact.email_addresses[emailEntry]);
+						emailEntry++;
+					}else{
+						printf("You have entered the maxium number of email addresses.\n");
+					}
+					break;
+				case e_fifth_opt:
+					break;
+			}
 		}
 	}while( option != e_first_opt);
 	
@@ -384,10 +377,11 @@ Status search_contact(AddressBook *address_book){
 				search(input, address_book,address_book->count,2, "Press: [q] | Cancel: ",e_search);
 				break;
 		}
-		option = get_option(CHAR,"");
-		if(option == e_back){
-			return e_back;
+		//press q to cancel in the list menu
+		while(option != e_back){
+			option = get_option(CHAR,"");	
 		}
+
 	}while(option != e_first_opt);
 	return e_back;
 }
@@ -428,6 +422,7 @@ Status edit_contact(AddressBook *address_book)
 				break;
 		}
 		if(proceed){	
+			//for selecting S to select or q to cancel
 			option = get_option(CHAR,"");
 			if(option == e_edit){
 				printf("Select a Serial Number (S.No) to Delete: ");
@@ -538,7 +533,7 @@ Status delete_contact(AddressBook *address_book)
 						"Press: [s] = Select, [q] | Cancel: ", e_delete);
 				//Store their option, return to menu if they chose to quit 'q'
 				option = get_option(CHAR, "");
-				if(option == 'q')
+				if(option == e_back)
 				{
 					return e_back;
 				}
@@ -556,7 +551,7 @@ Status delete_contact(AddressBook *address_book)
 						"Press: [s] = Select, [q] | Cancel: ", e_delete);
 				//Store their option, return to menu if they chose to quit 'q'
 				option = get_option(CHAR, "");
-				if(option == 'q')
+				if(option == e_back)
 				{
 					return e_back;
 				}
@@ -573,7 +568,7 @@ Status delete_contact(AddressBook *address_book)
 						"Press: [s] = Select, [q] | Cancel: ", e_delete);
 				//Store their option, return to menu if they chose to quit 'q'
 				option = get_option(CHAR, "");
-				if(option == 'q')
+				if(option == e_back)
 				{
 					return e_back;
 				}
@@ -642,7 +637,7 @@ Status delete_contact(AddressBook *address_book)
 	printf("Enter 'Y' to delete. [Press any key to ignore]: ");
 	option = get_option(CHAR,"");
 	//Return to main menu if user does not pres 'y' or 'Y'
-	if(option != 'Y'||option != 'y')
+	if(option != e_success)
 	{
 		return e_back;
 	}
