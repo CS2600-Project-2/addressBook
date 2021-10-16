@@ -27,30 +27,6 @@ int main(void)
 		}
 	}
 }
-/*
-//Declare the variables
 
-    int num;
-	int c;
-
-    // Input the integer
-
-    printf("Enter the integer: ");
-
-    scanf("%d", &num);
-    // Display the integer
-
-	printf("Entered integer is: %d", num);
-    
-	return 0;
-
-//Code for Read a char
-
-printf( "Enter a value :"); 
-  	c = getchar( ); 
-printf( "\nYou entered: ");
-   putchar( c ); return 0; 
-	
-	return 0;*/
 
 
