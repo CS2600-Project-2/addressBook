@@ -17,7 +17,6 @@ int main(void)
 	
 	if (ret == e_success)
 	{
-		printf("WHOOOOOOOOOOOOOOOOOOOOOOOOOOO");
 		/* Show all the available menu */
 		ret = menu(&address_book);
 		

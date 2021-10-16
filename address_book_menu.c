@@ -16,13 +16,13 @@ int get_option(int type, const char *msg)
 	int result = -1;
 	if(type == NUM){
 		int num;
-		scanf("%i\n", &num);
+		scanf("%i", &num);
 		result = num;
 
 	}else if(type == CHAR){
 		char input;
 		while(result == -1){
-			scanf("%c\n",&input);
+			scanf("%c",&input);
 			switch(input){
 				case 'q':
 					result = e_back;
@@ -88,11 +88,11 @@ Status list_contacts(AddressBook *address_book, int *index, Modes mode,const cha
 			//look at the start pointer of list, move it x ContactInfo Down
 			currentEntry = address_book->list[i];
 
-			printf(": %d\t: %s\t\t\t: %s\t\t\t: %s\t\t\t:\n",currentEntry.si_no, currentEntry.name[0],currentEntry.phone_numbers[0], currentEntry.email_addresses[0] );
+			printf(": %d\t: %s\t\t\t: %s\t\t\t: %s\t\t\t\n",currentEntry.si_no, currentEntry.name[0],currentEntry.phone_numbers[0], currentEntry.email_addresses[0] );
 
 			//if there are more rows for additional contacts
 			for(int j = 1; j < 5; j++){
-				printf(": \t\t\t: %s\t\t\t: %s\t\t\t:\n:", currentEntry.phone_numbers[i], currentEntry.email_addresses[i]);
+				printf(": \t: \t\t\t: %s\t\t\t: %s\t\t\t\n", currentEntry.phone_numbers[i], currentEntry.email_addresses[i]);
 			}
 			printf("=================================================================================================\n");
 		}
@@ -212,6 +212,7 @@ Status add_contacts(AddressBook *address_book)
 	do{
 		menu_header("Add Contact:\n");
 		printf("0. Back\n");
+		//if(name)
 		printf("1. Name       :\n");
 		printf("2. Phone No %i:\n", phoneEntry);
 		printf("3. Email ID %i:\n", emailEntry);
@@ -219,35 +220,34 @@ Status add_contacts(AddressBook *address_book)
 		printf("Please select an option: ");
 		option = get_option(NUM, "");
 
-		while (option != e_first_opt) {
-			switch (option)
-			{
-				case e_first_opt:
-					break;
-				case e_second_opt:
-					printf("Enter the name: ");
-					scanf("%s", newContact.name[0]);
-				case e_third_opt:
-					if(phoneEntry < 5){
-						printf("Enter Phone Number %i, [Please enter the same option of alternate Phone Number]:\n", phoneEntry);
-						scanf("%s", newContact.phone_numbers[phoneEntry]);
-						phoneEntry++;
-					}else{
-						printf("You have entered the maximum number of phone numbers.\n");
-					}
-					break;
-				case e_fourth_opt:
-					if(emailEntry < 5){
-						printf("Enter Email ID %i, [Please enter the same option of alternate Email ID]:\n", emailEntry);
-						scanf("%s", newContact.email_addresses[emailEntry]);
-						emailEntry++;
-					}else{
-						printf("You have entered the maxium number of email addresses.\n");
-					}
-					break;
-				case e_fifth_opt:
-					break;
-			}
+		switch (option)
+		{
+			case e_first_opt:
+				break;
+			case e_second_opt:
+				printf("Enter the name: ");
+				scanf("%s", newContact.name[0]);
+				break;
+			case e_third_opt:
+				if(phoneEntry < 5){
+					printf("Enter Phone Number %i, [Please enter the same option of alternate Phone Number]:\n", phoneEntry);
+					scanf("%s", newContact.phone_numbers[phoneEntry]);
+					phoneEntry++;
+				}else{
+					printf("You have entered the maximum number of phone numbers.\n");
+				}
+				break;
+			case e_fourth_opt:
+				if(emailEntry < 5){
+					printf("Enter Email ID %i, [Please enter the same option of alternate Email ID]:\n", emailEntry);
+					scanf("%s", newContact.email_addresses[emailEntry]);
+					emailEntry++;
+				}else{
+					printf("You have entered the maxium number of email addresses.\n");
+				}
+				break;
+			case e_fifth_opt:
+				break;
 		}
 	}while( option != e_first_opt);
 	
