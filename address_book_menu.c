@@ -207,16 +207,47 @@ Status add_contacts(AddressBook *address_book)
 	ContactInfo newContact;
 	newContact.si_no = address_book->count + 1;
 	do{
-		menu_header("Add Contact:\n");
-		printf("0. Back\n");
-		//if(name)
-		printf("1. Name       : %s\n", newContact.name[0]);
-		printf("2. Phone No %i: %s\n", phoneEntry, newContact.phone_numbers[phoneEntry]);
-		printf("3. Email ID %i: %s\n", emailEntry, newContact.email_addresses[emailEntry]);
-		printf("\n");
-		printf("Please select an option: ");
-		option = get_option(NUM, "");
-
+		if (phoneEntry == 1 && emailEntry == 1) {
+			menu_header("Add Contact:\n");
+			printf("0. Back\n");
+			printf("1. Name       : %s\n", newContact.name[0]);
+			printf("2. Phone No %i: %s\n", phoneEntry, newContact.phone_numbers[phoneEntry-1]);
+			printf("3. Email ID %i: %s\n", emailEntry, newContact.email_addresses[emailEntry-1]);
+			printf("\n");
+			printf("Please select an option: ");
+			option = get_option(NUM, "");
+		}
+		else if (emailEntry == 1  && phoneEntry != 1) {
+			menu_header("Add Contact:\n");
+			printf("0. Back\n");
+			printf("1. Name       : %s\n", newContact.name[0]);
+			printf("2. Phone No %i: %s\n", phoneEntry - 1, newContact.phone_numbers[phoneEntry - 2]);
+			printf("3. Email ID %i: %s\n", emailEntry, newContact.email_addresses[emailEntry - 1]);
+			printf("\n");
+			printf("Please select an option: ");
+			option = get_option(NUM, "");
+		}
+		else if (emailEntry != 1 && phoneEntry == 1) {
+			menu_header("Add Contact:\n");
+			printf("0. Back\n");
+			printf("1. Name       : %s\n", newContact.name[0]);
+			printf("2. Phone No %i: %s\n", phoneEntry, newContact.phone_numbers[phoneEntry - 1]);
+			printf("3. Email ID %i: %s\n", emailEntry - 1, newContact.email_addresses[emailEntry - 2]);
+			printf("\n");
+			printf("Please select an option: ");
+			option = get_option(NUM, "");
+		}
+		else {
+			menu_header("Add Contact:\n");
+			printf("0. Back\n");
+			printf("1. Name       : %s\n", newContact.name[0]);
+			printf("2. Phone No %i: %s\n", phoneEntry - 1, newContact.phone_numbers[phoneEntry - 2]);
+			printf("3. Email ID %i: %s\n", emailEntry - 1, newContact.email_addresses[emailEntry - 2]);
+			printf("\n");
+			printf("Please select an option: ");
+			option = get_option(NUM, "");
+		}
+		
 		switch (option)
 		{
 			case e_first_opt:
@@ -228,7 +259,7 @@ Status add_contacts(AddressBook *address_book)
 			case e_third_opt:
 				if(phoneEntry < 5){
 					printf("Enter Phone Number %i, [Please enter the same option of alternate Phone Number]:\n", phoneEntry);
-					scanf("%s", newContact.phone_numbers[phoneEntry]);
+					scanf("%s", newContact.phone_numbers[phoneEntry-1]);
 					phoneEntry++;
 				}else{
 					printf("You have entered the maximum number of phone numbers.\n");
@@ -237,7 +268,7 @@ Status add_contacts(AddressBook *address_book)
 			case e_fourth_opt:
 				if(emailEntry < 5){
 					printf("Enter Email ID %i, [Please enter the same option of alternate Email ID]:\n", emailEntry);
-					scanf("%s", newContact.email_addresses[emailEntry]);
+					scanf("%s", newContact.email_addresses[emailEntry-1]);
 					emailEntry++;
 				}else{
 					printf("You have entered the maxium number of email addresses.\n");
