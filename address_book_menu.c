@@ -78,7 +78,7 @@ Status save_prompt(AddressBook *address_book)
 
 	return e_success;
 }
-/*	title = WTF IS TITLE FOR????? THERE IS NO TITLE FOR THIS CHART
+/*	
 	index = ARRAY OF ENTRY INDEXES to list
 	msg = end msg for response (press q to go back, enter number to delete or edit)
 	Mode = what method is calling this? edit, add, delete, search?
