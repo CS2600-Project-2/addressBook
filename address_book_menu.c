@@ -65,7 +65,12 @@ Status save_prompt(AddressBook *address_book)
 
 			break;
 		}
-	} while (option != e_success);
+		else if (option == e_fail)
+		{
+			printf("Data didn't save in %s\n", DEFAULT_FILE);
+			break;
+		}
+	} while (option != e_success || option != e_fail);
 
 	free(address_book->list);
 
@@ -79,7 +84,7 @@ Status save_prompt(AddressBook *address_book)
 */
 Status list_contacts(AddressBook *address_book, int *index, Modes mode,const char *msg, int IndexLength)
 {
-	ContactInfo currentEntry = *(address_book->list);
+	// ContactInfo *currentEntry = address_book->list;
 	int option;
 	menu_header("Search Result:\n");
     printf("=================================================================================================\n"); 
@@ -88,39 +93,39 @@ Status list_contacts(AddressBook *address_book, int *index, Modes mode,const cha
 	if(mode == e_list){
 		for(int i = 0; i < address_book->count; i++){
 			//look at the start pointer of list, move it x ContactInfo Down
-			currentEntry = address_book->list[i];
+			printf("%i\t ", address_book->list[i].si_no);
+			printf("%s", address_book->list[i].name[0]);
+			for (int j = 0; j < PHONE_NUMBER_COUNT; j++) {
+				if (j == 0 && strlen(address_book->list[i].name[0]) <= 6) {
+					printf("\t");
+				}
+				if (j > 0) {
+					printf("\t\t");
+				}
+				if (strcmp(address_book->list[i].phone_numbers[j], "\0") == 0 || address_book->list[i].phone_numbers[j] == NULL) {
+					continue;
+				}
+				else {
+					printf("\t\t %s", address_book->list[i].phone_numbers[j]);
+				}
 
-			printf(": %d\t: %s\t\t\t: %s\t\t\t: %s\t\t\t\n",currentEntry.si_no, currentEntry.name[0],currentEntry.phone_numbers[0], currentEntry.email_addresses[0] );
-
-			//if there are more rows for additional contacts
-			for(int j = 1; j < 5; j++){
-				printf(": \t: \t\t\t: %s\t\t\t: %s\t\t\t\n", currentEntry.phone_numbers[i], currentEntry.email_addresses[i]);
+				if (strcmp(address_book->list[i].email_addresses[j], "\0") == 0 || address_book->list[i].email_addresses[j] == NULL) {
+					continue;
+				}
+				else {
+					printf("\t\t\t %s\n", address_book->list[i].email_addresses[j]);
+				}
 			}
-			printf("=================================================================================================\n");
+			printf("\n=================================================================================================\n");
 		}
-		printf(msg);
-
-		while(option != e_back){
-			option = get_option(CHAR,"");
-		}
-		
-		return e_success;
-
-	//if we are listing after a search function call
-	}else{
-		for(int i = 0; i < IndexLength; i++){
-			currentEntry = address_book->list[i];
-			printf(": %d\t: %s\t\t\t: %s\t\t\t: %s\t\t\t:\n",currentEntry.si_no, currentEntry.name[0],currentEntry.phone_numbers[0], currentEntry.email_addresses[0] );
-
-			//if there are more rows for additional contacts
-			for(int j = 1; j < 5; j++){
-				printf(": \t\t\t: %s\t\t\t: %s\t\t\t:\n:", currentEntry.phone_numbers[i], currentEntry.email_addresses[i]);
-			}
-			printf("=================================================================================================\n");
-		}
-		printf(msg);
-		return e_success;
 	}
+	printf(msg);
+
+	while(option != e_back){
+		option = get_option(CHAR,"");
+	}
+		
+	return e_success;
 }
 
 void menu_header(const char *str)
@@ -206,15 +211,22 @@ Status add_contacts(AddressBook *address_book)
 	int option;
 	int phoneEntry = 1;
 	int emailEntry = 1;
-	ContactInfo newContact;
-	newContact.si_no = address_book->count + 1;
+	ContactInfo *newContact;
+	newContact = address_book->list;
+	for (int i = 0; i < address_book->count; i++) {
+		newContact++;
+	}
 	do{
 		if (phoneEntry == 1 && emailEntry == 1) {
 			menu_header("Add Contact:\n");
 			printf("0. Back\n");
-			printf("1. Name       : %s\n", newContact.name[0]);
-			printf("2. Phone No %i: %s\n", phoneEntry, newContact.phone_numbers[phoneEntry-1]);
-			printf("3. Email ID %i: %s\n", emailEntry, newContact.email_addresses[emailEntry-1]);
+			printf("1. Name       : %s\n", newContact->name[0]);
+			printf("2. Phone No %i: %s\n", phoneEntry, newContact->phone_numbers[phoneEntry-1]);
+			printf("3. Email ID %i: %s\n", emailEntry, newContact->email_addresses[emailEntry-1]);
+			printf("4. Enter a serial number  : ");
+			if (newContact->si_no != 0) {
+				printf("%d\n", newContact->si_no);
+			}
 			printf("\n");
 			printf("Please select an option: ");
 			option = get_option(NUM, "");
@@ -222,9 +234,13 @@ Status add_contacts(AddressBook *address_book)
 		else if (emailEntry == 1  && phoneEntry != 1) {
 			menu_header("Add Contact:\n");
 			printf("0. Back\n");
-			printf("1. Name       : %s\n", newContact.name[0]);
-			printf("2. Phone No %i: %s\n", phoneEntry - 1, newContact.phone_numbers[phoneEntry - 2]);
-			printf("3. Email ID %i: %s\n", emailEntry, newContact.email_addresses[emailEntry - 1]);
+			printf("1. Name       : %s\n", newContact->name[0]);
+			printf("2. Phone No %i: %s\n", phoneEntry - 1, newContact->phone_numbers[phoneEntry - 2]);
+			printf("3. Email ID %i: %s\n", emailEntry, newContact->email_addresses[emailEntry - 1]);
+			printf("4. Enter a serial number  : ");
+			if (newContact->si_no != 0) {
+				printf("%d\n", newContact->si_no);
+			}
 			printf("\n");
 			printf("Please select an option: ");
 			option = get_option(NUM, "");
@@ -232,9 +248,13 @@ Status add_contacts(AddressBook *address_book)
 		else if (emailEntry != 1 && phoneEntry == 1) {
 			menu_header("Add Contact:\n");
 			printf("0. Back\n");
-			printf("1. Name       : %s\n", newContact.name[0]);
-			printf("2. Phone No %i: %s\n", phoneEntry, newContact.phone_numbers[phoneEntry - 1]);
-			printf("3. Email ID %i: %s\n", emailEntry - 1, newContact.email_addresses[emailEntry - 2]);
+			printf("1. Name       : %s\n", newContact->name[0]);
+			printf("2. Phone No %i: %s\n", phoneEntry, newContact->phone_numbers[phoneEntry - 1]);
+			printf("3. Email ID %i: %s\n", emailEntry - 1, newContact->email_addresses[emailEntry - 2]);
+			printf("4. Enter a serial number  : ");
+			if (newContact->si_no != 0) {
+				printf("%d\n", newContact->si_no);
+			}
 			printf("\n");
 			printf("Please select an option: ");
 			option = get_option(NUM, "");
@@ -242,9 +262,13 @@ Status add_contacts(AddressBook *address_book)
 		else {
 			menu_header("Add Contact:\n");
 			printf("0. Back\n");
-			printf("1. Name       : %s\n", newContact.name[0]);
-			printf("2. Phone No %i: %s\n", phoneEntry - 1, newContact.phone_numbers[phoneEntry - 2]);
-			printf("3. Email ID %i: %s\n", emailEntry - 1, newContact.email_addresses[emailEntry - 2]);
+			printf("1. Name       : %s\n", newContact->name[0]);
+			printf("2. Phone No %i: %s\n", phoneEntry - 1, newContact->phone_numbers[phoneEntry - 2]);
+			printf("3. Email ID %i: %s\n", emailEntry - 1, newContact->email_addresses[emailEntry - 2]);
+			printf("4. Enter a serial number  : ");
+			if (newContact->si_no != 0) {
+				printf("%d\n", newContact->si_no);
+			}
 			printf("\n");
 			printf("Please select an option: ");
 			option = get_option(NUM, "");
@@ -256,12 +280,12 @@ Status add_contacts(AddressBook *address_book)
 				break;
 			case e_second_opt:
 				printf("Enter the name: ");
-				scanf("%s", newContact.name[0]);
+				scanf("%s", newContact->name[0]);
 				break;
 			case e_third_opt:
 				if(phoneEntry < 5){
 					printf("Enter Phone Number %i, [Please enter the same option of alternate Phone Number]:\n", phoneEntry);
-					scanf("%s", newContact.phone_numbers[phoneEntry-1]);
+					scanf("%s", newContact->phone_numbers[phoneEntry-1]);
 					phoneEntry++;
 				}else{
 					printf("You have entered the maximum number of phone numbers.\n");
@@ -270,51 +294,25 @@ Status add_contacts(AddressBook *address_book)
 			case e_fourth_opt:
 				if(emailEntry < 5){
 					printf("Enter Email ID %i, [Please enter the same option of alternate Email ID]:\n", emailEntry);
-					scanf("%s", newContact.email_addresses[emailEntry-1]);
+					scanf("%s", newContact->email_addresses[emailEntry-1]);
 					emailEntry++;
 				}else{
 					printf("You have entered the maxium number of email addresses.\n");
 				}
 				break;
 			case e_fifth_opt:
+				printf("Enter your serial number: ");
+				scanf("%d", &newContact->si_no);
+				printf("read successful\n");
+				break;
+			case e_sixth_opt:
+				break;
+			default:
+				printf("Invalid option.\n");
 				break;
 		}
 	}while( option != e_first_opt);
 	
-	//is there space in the allotted malloc space?
-	int openSpot = -1;
-	int counter = 0;
-	bool found = false;
-	ContactInfo currentEntry = *(address_book->list);
-	while(counter < address_book->count && !found){
-		currentEntry = address_book->list[counter];
-		if(currentEntry.name[0] == NULL && currentEntry.phone_numbers[0] == NULL && currentEntry.email_addresses[0] == NULL){
-			openSpot = counter;
-			found = true;
-		}else{
-			counter++;
-		}
-	}
-	//if found, put in open spot, else make more room for the new entry
-	if(found){
-		*currentEntry.name[0] = *newContact.name[0];
-		for(int i = 0; i < phoneEntry;i++){
-			*currentEntry.phone_numbers[i] = *newContact.phone_numbers[i];
-		}
-		for(int i = 0; i < emailEntry;i++){
-			*currentEntry.email_addresses[i] = *newContact.email_addresses[i];
-		}
-	}else{
-		currentEntry = address_book->list[address_book->count +1];
-		*currentEntry.name[0] = *newContact.name[0];
-		for(int i = 0; i < phoneEntry;i++){
-			*currentEntry.phone_numbers[i] = *newContact.phone_numbers[i];
-		}
-		for(int i = 0; i < emailEntry;i++){
-			*currentEntry.email_addresses[i] = *newContact.email_addresses[i];
-		}
-	}
-
 	address_book->count++;
 	return e_success;
 }
@@ -370,6 +368,16 @@ Status search(const char *str, AddressBook *address_book, int loop_count, int fi
 		printf("There are no entries values which match. Sorry\n");
 	}
 	return e_success;
+
+	ContactInfo *currentContact;
+	currentContact = address_book->list;
+	for (int i = 0; i < loop_count; i++) {
+		if (field == 0) {
+			if(strcmp(str, currentContact->name[0])) {
+
+			}
+		}
+	}
 }
 
 
