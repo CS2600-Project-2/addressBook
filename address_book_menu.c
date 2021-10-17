@@ -74,7 +74,6 @@ Status save_prompt(AddressBook *address_book)
 		}
 	} while (option != e_success || option != e_fail);
 
-	free(address_book->list);
 
 	return e_success;
 }
@@ -217,6 +216,11 @@ Status menu(AddressBook *address_book)
 				break;
 			case e_save:
 				save_file(address_book);
+				while(option!=e_success)
+				{
+					printf("Done. Please enter 'Y' to continue: ");
+					option = get_option(CHAR," ");
+				}
 				break;
 			case e_exit:
 				printf("GoodBye\n");
