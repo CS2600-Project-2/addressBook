@@ -38,6 +38,8 @@ int get_option(int type, const char *msg)
 				case 'n':
 					result = e_fail;
 					break;
+				case '\n':
+					continue;
 				default:
 					printf("Not a valid char command. Please try again.");
 			}
@@ -684,18 +686,15 @@ Status delete_contact(AddressBook *address_book)
 			//Loop starting at serial number looping to the end of count
 			for(; serialNum < address_book->count; serialNum++)
 			{	
-				//Copy serial num of current to next contact
-				nextEntry->si_no = curEntry->si_no;
-				//Copy next contact with updated serial number to current contact
+				//Copy next contact to current contact
 				memcpy(curEntry, nextEntry, sizeof(ContactInfo));
+				//Copy serial num to contact
+				curEntry->si_no = serialNum;
 				//Increment pointer 
 				curEntry++;
-				//Check before we increment nextEntry on the last iteration of loop 
-				//we don't want to increment the pointer because it may point out of bounds
-				if (nextEntry->si_no < address_book->count)
-					nextEntry = curEntry + 1;
-				//Increment loop checker
-				serialNum++;
+				//Make sure it does not point out of bounds
+				if(serialNum<address_book->count-1)
+					nextEntry++;	
 			}
 			//Setting all fields equal to null for last contact
 			memset(curEntry,0,sizeof(ContactInfo));
