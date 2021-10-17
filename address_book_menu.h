@@ -17,7 +17,7 @@ Status add_contacts(AddressBook *address_book);
 Status search_contact(AddressBook *address_book);
 Status edit_contact(AddressBook *address_book);
 Status delete_contact(AddressBook *address_book);
-Status list_contacts(AddressBook *address_book, int *index, Modes mode,const char *msg, int indexLength);
+Status list_contacts(AddressBook *address_book, int *index, Modes mode,const char *msg, int length);
 //Status list_contacts(AddressBook *address_book, const char *title, int *index, const char *msg, Modes mode);
 
 #endif
