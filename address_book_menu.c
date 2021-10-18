@@ -144,6 +144,11 @@ Status list_contacts(AddressBook *address_book, int *index, Modes mode,const cha
 			printf("==================================================================================================================\n");			
 		}
 		printf(msg);		
+
+		if (mode == e_search) {
+		    while(option != e_back)
+            	option = get_option(CHAR,"");
+        }
 	}	
 	return e_success;
 }
